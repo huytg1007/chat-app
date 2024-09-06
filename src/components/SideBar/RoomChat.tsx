@@ -1,16 +1,26 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Room } from "../../Models/Room";
-import { Typography } from "antd";
-import styled from "styled-components";
+import useFirestore from "../../hooks/useFirestore";
 
 type Props = {
   room: Room;
   setSelectedRoomId: Dispatch<SetStateAction<string | undefined>>;
-  lastMessage: string;
   isSelected: boolean;
 };
 
-const RoomChat = ({ room, setSelectedRoomId, lastMessage, isSelected }: Props) => {
+const RoomChat = ({ room, setSelectedRoomId, isSelected }: Props) => {
+
+  const condition = React.useMemo(
+    () => ({
+      fieldName: 'roomId',
+      operator: '==',
+      compareValue: room?.id,
+    }),
+    [room?.id]
+  );
+
+  const lastMessage = useFirestore('messages', condition, 1, "desc");
+
   return (
     <div
       // className="flex items-center p-4 bg-gray-700  hover:bg-gray-100 border-b border-gray-300 cursor-pointer"
@@ -26,7 +36,11 @@ const RoomChat = ({ room, setSelectedRoomId, lastMessage, isSelected }: Props) =
       />
       <div className="ml-4">
         <div className="text-white font-semibold text-lg">{room.name}</div>
-        <div className="text-gray-500 text-sm">{lastMessage}</div>
+        <div className="text-gray-500 text-sm">
+          {lastMessage[0] && (
+            lastMessage[0].fileURL ? 'đã gửi một ảnh' : lastMessage[0].text
+          )}
+    </div>
       </div>
     </div>
   );

@@ -56,10 +56,7 @@ const LoginPage = (props: Props) => {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white" >
               Sign in to your account
             </h1>
-            <form 
-              className="space-y-4 md:space-y-6" 
-              onSubmit={handleSubmit(handleLogin)}>
-
+            
             <button
               className="mb-3 flex w-full items-center justify-center rounded bg-primary px-7 pb-2.5 pt-3 text-center text-sm font-medium uppercase leading-normal text-white shadow-primary-3 transition duration-150 ease-in-out hover:bg-primary-accent-300 hover:shadow-primary-2 focus:bg-primary-accent-300 focus:shadow-primary-2 focus:outline-none focus:ring-0 active:bg-primary-600 active:shadow-primary-2 dark:shadow-black/30 dark:hover:shadow-dark-strong dark:focus:shadow-dark-strong dark:active:shadow-dark-strong"
               style={{backgroundColor: "#3b5998"}}
@@ -99,12 +96,17 @@ const LoginPage = (props: Props) => {
             Continue with Google
           </button>
 
+            <form 
+              className="space-y-4 md:space-y-6" 
+              onSubmit={handleSubmit(handleLogin)}>
+
+            
               <div>
                 <label
                   htmlFor="email"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
-                  Your email
+                  Your account
                 </label>
                 <input
                   className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary- block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"

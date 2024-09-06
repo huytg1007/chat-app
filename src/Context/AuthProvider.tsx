@@ -7,6 +7,8 @@ import { UserProfile } from "../Models/User";
 import { toast }  from "react-toastify";
 import { auth } from '../firebase/config';
 import { Spin } from 'antd';
+import { addDocument, generateKeywords } from "../firebase/service";
+import useFirestore from "../hooks/useFirestore";
 
 type UserContextType = {
   user: UserProfile | null;
@@ -27,22 +29,13 @@ export default function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // use for login with account
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    if (user && token) {
-      setUser(JSON.parse(user));
-      setToken(token);
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-    }
-    setIsLoading(false);
-  }, []);
-
-
   // Use for login gg and fb via firebase
   React.useEffect(() => {
+    const user = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    console.log("re-render");
     const unsubscibed = auth.onAuthStateChanged((userFirebase) => {
+      // console.log(user);
       if (userFirebase) {
         const { displayName, email, uid, photoURL, } = userFirebase;
         setUser({
@@ -57,20 +50,16 @@ export default function AuthProvider({ children }: Props) {
         return;
       }
 
-      // else if (user){
-      //   console.log("User: "  + user)
-      //   const { displayName, email, uid, photoURL, } = user;
-      //   setUser({
-      //     displayName,
-      //     email,
-      //     uid,
-      //     photoURL,
-      //   }); 
-      //   setIsLoading(false);
-      //   navigate('/');
-      //   console.log("Login Via API Success")
-      //   return;
-      // }
+      else if (user){
+        console.log("User: "  + user)
+        setUser(JSON.parse(user));
+        setToken(token);
+        axios.defaults.headers.common["Authorization"] = "Bearer " + token;
+        setIsLoading(false);
+        navigate('/');
+        console.log("Login Via API Success")
+        return;
+      }
       
       // reset user info
       console.log("Authenticate Firebase Fail")
@@ -111,12 +100,34 @@ export default function AuthProvider({ children }: Props) {
   };
 
   const loginUser = async (username: string, password: string) => {
+    // const condition = React.useMemo(
+    //   () => ({
+    //     fieldName: 'roomId',
+    //     operator: '==',
+    //     compareValue: username,
+    //   }),
+    //   [username]
+    // );
+    // const checkUserExist = useFirestore('users', condition);
+
+    console.log("Login API")
     await loginAPI(username, password)
       .then((res) => {
         if (res) {
+          console.log(res);
+          // if(checkUserExist){
+          //   addDocument("users", {
+          //     displayName: res?.data.userName,
+          //     email: res?.data.email,
+          //     photoURL: "https://firebasestorage.googleapis.com/v0/b/chat-app-3498c.appspot.com/o/images%2Fprofile-default-icon-2048x2045-u3j7s5nj.png?alt=media&token=67e3039c-200b-4e1f-8340-f82675e8bab1",
+          //     uid: "test",
+          //     providerId: "from.net api",
+          //     keywords: generateKeywords(res?.data.userName.toLowerCase()),
+          //   });
+          // }
           localStorage.setItem("token", res?.data.token);
           const userObj = {
-            uid: "",
+            uid: "test",
             displayName: res?.data.userName,
             email: res?.data.email,
             photoURL: "",
@@ -139,8 +150,9 @@ export default function AuthProvider({ children }: Props) {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    console.log("Logout")
     setToken("");
-    navigate("/");
+    navigate('/login');
   };
 
   return (

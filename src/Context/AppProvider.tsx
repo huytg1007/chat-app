@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import useFirestore from '../hooks/useFirestore';
-
 import { UserContextType } from '../Models/User';
 import { Room } from '../Models/Room';
 import { AuthContext } from './AuthProvider';
@@ -14,7 +13,6 @@ export default function AppProvider({ children }: Props) {
   const [isAddRoomVisible, setIsAddRoomVisible] = useState(false);
   const [isInviteMemberVisible, setIsInviteMemberVisible] = useState(false);
   const [isChangeRoomNameVisible, setIsChangeRoomNameVisible] = useState(false);
-
   const [selectedRoomId, setSelectedRoomId] = useState<string | undefined>(undefined);
 
   const {user, } = React.useContext<UserContextType>(AuthContext);

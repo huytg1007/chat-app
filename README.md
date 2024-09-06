@@ -1,3 +1,6 @@
+# Project Main View
+![alt text](https://firebasestorage.googleapis.com/v0/b/chat-app-3498c.appspot.com/o/images%2FScreenshot%202024-09-06%20015338.png?alt=media&token=d9213973-30ed-46e8-90c8-ad7ea1400e9c)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

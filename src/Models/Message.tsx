@@ -3,6 +3,7 @@ export type ChatWindowModel = {
     email: string | null,
     uid: string ,
     photoURL?: string,
+    fileURL?: string,
     text: string,
     createdAt: any;
   };  
@@ -10,6 +11,8 @@ export type ChatWindowModel = {
 export type MessageModel = {
     displayName: string,
     photoURL?: string,
+    fileURL?: string,
     text: string,
     createdAt: any;
+    isCurrentUser: boolean;
 }

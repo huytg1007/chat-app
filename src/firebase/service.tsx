@@ -16,7 +16,11 @@ export const uploadImage = async (file: any): Promise<string> => {
 
   try {
     const userId = auth.currentUser?.uid;
-    if (!userId) throw new Error("User not authenticated");
+    const user = localStorage.getItem("user");
+    console.log(userId)
+    console.log(user)
+
+    if (!userId && !user) throw new Error("User not authenticated");
 
     // 1. Upload the image to Firebase Storage
     // console.log(file)
@@ -26,7 +30,7 @@ export const uploadImage = async (file: any): Promise<string> => {
     const storageRef = ref(storage, 'images/' + fileName);
 
     // 'file' comes from the Blob or File API
-    uploadBytes(storageRef, file).then((snapshot) => {
+    await uploadBytes(storageRef, file).then((snapshot) => {
       console.log('Uploaded a blob or file!');
     });
 
@@ -37,7 +41,6 @@ export const uploadImage = async (file: any): Promise<string> => {
         // `url` is the download URL for 'images/fileName}'
         // and ?alt=media to url to make it work
         fixUrl = url + '?alt=media';
-        console.log(fixUrl);
       })
     .catch((error) => {
       // Handle any errors
@@ -78,7 +81,6 @@ export const changeRoomName = async (newName: string, curRoomId: string) => {
     console.error("Error updating room name: ", error);
   }
 };
-
 
 // tao keywords cho displayName, su dung cho search
 export const generateKeywords = (displayName: string | undefined) => {

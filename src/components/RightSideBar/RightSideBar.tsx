@@ -75,16 +75,13 @@ export default function RightSideBar() {
   const { setIsChangeRoomNameVisible, selectedRoom, members } = useContext<AppContextType>(AppContext);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleAvatarChange = async (event: any) => {
-    const file = event.target.files[0];
+  const handleAvatarChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
     if (file) {
       await uploadImage(file).then(async (url) => {
         if (url) {
-          changeAvatar(url, selectedRoom.id);
-          console.log("Image uploaded successfully. URL:", url);
-          } else {
-            console.log("Failed to upload image.");
-          }
+          await changeAvatar(url, selectedRoom.id);
+        } 
       });
     }
   };
@@ -148,13 +145,6 @@ export default function RightSideBar() {
           <Space direction="vertical">
             <Button icon={<FileImageOutlined />} type="text" style={{ color: 'white' }}>File phương tiện</Button>
             <Button icon={<FileOutlined />} type="text" style={{ color: 'white' }}>File</Button>
-          </Space>
-        </CustomPanel>
-
-        <CustomPanel header="Quyền riêng tư & hỗ trợ" key="4">
-          <Space direction="vertical">
-            <Button icon={<BellOutlined />} type="text" style={{ color: 'white' }}>Tắt thông báo</Button>
-            <Button icon={<LockOutlined />} type="text" style={{ color: 'white' }}>Xác minh mã hóa đầu cuối</Button>
           </Space>
         </CustomPanel>
 

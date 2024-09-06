@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+
 import { Typography, Button } from "antd";
 import styled from "styled-components";
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { AppContext } from "../../Context/AppProvider";
 import { AppContextType } from "../../Models/AppContext";
 import RoomChat from "./RoomChat";
-import useFirestore from "../../hooks/useFirestore";
+import { useContext } from "react";
 
 const WrapperStyled = styled.div`
   height: 80vh;
@@ -36,36 +36,16 @@ const WrapperStyled = styled.div`
 `;
 
 export default function RoomList() {
-  const { rooms, setIsAddRoomVisible, setSelectedRoomId, selectedRoom } = React.useContext<AppContextType>(AppContext);
-  const [lastSender, setLastSender] = useState<string>();
+  const { rooms, setIsAddRoomVisible, setSelectedRoomId } = useContext<AppContextType>(AppContext);
 
   const handleAddRoom = () => {
     setIsAddRoomVisible(true);
   };
 
-  const condition = React.useMemo(
-    () => ({
-      fieldName: 'roomId',
-      operator: '==',
-      compareValue: selectedRoom?.id,
-    }),
-    [selectedRoom?.id]
-  );
-
-  const lastMessage = useFirestore('messages', condition, 1);
-  if(lastMessage.length == 1){
-    console.log("IN")
-    // setLastSender("?");
-  }
- 
-
-  //console.log(lastMessage);
-
   return (
     <WrapperStyled>
         <div className="header__info">
         <Typography.Text className="header__content"> Đoạn chat</Typography.Text>
-
           <Button
             style={{ color: "white" }}
             type="text"
@@ -76,25 +56,18 @@ export default function RoomList() {
             Thêm phòng
           </Button>
         </div>
-
         <div className="room-list">
-
           <div className="w-full h-full overflow-y-auto p-4">
             {rooms.map((room) => (
               <RoomChat
                 key={room.id}
                 room={room}
                 setSelectedRoomId={setSelectedRoomId}
-                lastMessage={"lastSender"}
                 isSelected={false}
               />
             ))}
-
-              
           </div>
-
         </div>
-        
     </WrapperStyled>
   );
 }

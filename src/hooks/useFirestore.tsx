@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { db } from '../firebase/config';
+import firebase, { db } from '../firebase/config';
 
 type Condition = {
   fieldName: string;
@@ -7,11 +7,11 @@ type Condition = {
   compareValue: any;
 }
 
-const useFirestore = (collection: string, condition: Condition, limit?: number) => {
+const useFirestore = (collection: string, condition: Condition, limit?: number, order?: any) => {
   const [documents, setDocuments] = useState<any>([]);
 
   useEffect(() => {
-    let collectionRef = db.collection(collection).orderBy('createdAt');
+    let collectionRef = db.collection(collection).orderBy('createdAt', order);
     if (condition) {
       if (!condition.compareValue || !condition.compareValue.length) {
         // reset documents data
@@ -39,7 +39,7 @@ const useFirestore = (collection: string, condition: Condition, limit?: number) 
     });
 
     return unsubscribe;
-  }, [collection, condition]);
+  }, [collection, condition, limit, order]);
 
   return documents;
 };

@@ -3,7 +3,7 @@ import { Button, Avatar, Typography } from 'antd';
 import styled from 'styled-components';
 
 import { auth } from '../../firebase/config';
-import { AuthContext } from '../../Context/AuthProvider';
+import { AuthContext, useAuth } from '../../Context/AuthProvider';
 import { AppContext } from '../../Context/AppProvider';
 import { UserContextType } from '../../Models/User';
 import { AppContextType } from '../../Models/AppContext';
@@ -21,8 +21,9 @@ const WrapperStyled = styled.div`
 `;
 
 export default function UserInfo() {
-  const {user, } = React.useContext<UserContextType>(AuthContext);
+  const { user } = React.useContext<UserContextType>(AuthContext);
   const { clearState } = React.useContext<AppContextType>(AppContext);
+  const { logout } = React.useContext<UserContextType>(AuthContext);
 
   return (
     <WrapperStyled>
@@ -37,6 +38,7 @@ export default function UserInfo() {
         onClick={() => {
           // clear state in App Provider when logout
           clearState();
+          logout();
           auth.signOut();
         }}
       >
